@@ -1,27 +1,26 @@
+var path = require('path');
+var webpack = require('webpack');
+
 module.exports = {
-  context: __dirname + "/app",
-  entry: {
-    javascript: "./js/app.jsx",
-    html: "./index.html",
+  devtool: 'eval',
+  entry: [
+    'webpack-dev-server/client?http://localhost:3000',
+    'webpack/hot/only-dev-server',
+    './src/index'
+  ],
+  output: {
+    path: path.join(__dirname, 'dist'),
+    filename: 'bundle.js',
+    publicPath: '/static/'
   },
-   output: {
-     filename: "js/app.js",
-     path: __dirname + "/app/dist/",
-   },
-    module: {
-        loaders: [
-            {
-                //tell webpack to use jsx-loader for all *.jsx files
-                test: /\.jsx$/,
-                loader: 'jsx-loader?insertPragma=React.DOM&harmony'
-            },
-            {
-              test: /\.html$/,
-              loader: "file?name=[name].[ext]",
-            },
-        ]
-    },
-    resolve: {
-        extensions: ['', '.js', '.jsx']
-    }
-}
+  plugins: [
+    new webpack.HotModuleReplacementPlugin()
+  ],
+  module: {
+    loaders: [{
+      test: /\.js$/,
+      loaders: ['react-hot', 'babel'],
+      include: path.join(__dirname, 'src')
+    }]
+  }
+};
